@@ -5,10 +5,11 @@
 # but you can also edit it by hand.
 
 meteor-platform
-insecure
 momentjs:moment
 accounts-google
 accounts-ui
 accounts-password
 iron:router
 themeteorchef:jquery-validation
+less
+nemo64:bootstrap
