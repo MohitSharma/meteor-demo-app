@@ -42,7 +42,7 @@ Template.todoItem.helpers({
     }
 });
 
-Template.lists.events({
+Template.projectLists.events({
     'click .delete-list': function(event){
         event.preventDefault();
         var documentId = this._id;
@@ -116,7 +116,7 @@ Template.todoItem.events({
 
 //Handling Lists
 
-Template.lists.helpers({
+Template.projectLists.helpers({
     'list': function(){
         var currentUser = Meteor.userId();
         return Lists.find({createdBy: currentUser}, {sort: {name: 1}});
@@ -125,7 +125,7 @@ Template.lists.helpers({
 
 //Template Level Subscriptions
 
-Template.lists.onCreated(function () {
+Template.projectLists.onCreated(function () {
     this.subscribe('lists');
 });
 

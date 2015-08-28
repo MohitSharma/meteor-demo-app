@@ -15,15 +15,15 @@ Router.route('/account', {
 });
 
 Router.route('/list/:_id', {
-    name: 'listPage',
-    template: 'listPage',
+    name: 'projectPage',
+    template: 'projectPage',
     data: function(){
         var currentList = this.params._id;
-        return Meteor.call("findList", currentList);
+        return Lists.findOne({_id: currentList});
     },
     waitOn: function(){
         var currentList = this.params._id;
-        return Meteor.subscribe('todos', currentList);
+        return [Meteor.subscribe('lists', currentList), Meteor.subscribe('todos', currentList)];
     },
     onBeforeAction: function(){
         var currentUser = Meteor.userId();

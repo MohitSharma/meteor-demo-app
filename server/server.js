@@ -31,7 +31,7 @@ Meteor.methods({
         var data = {
             _id: documentId,
             createdBy: currentUser
-        }
+        };
         if(!currentUser){
             throw new Meteor.Error("not-logged-in", "You're not logged-in.");
         }

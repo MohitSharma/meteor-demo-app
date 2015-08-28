@@ -40,36 +40,6 @@
     </form>
 </template>
 
-<template name="lists">
-    <div class="row">
-        <div class="col-md-9 col-xs-12">
-            <div class="well">
-                <h1>Task Mangement System</h1>
-            </div>
-        </div>
-        <div class="col-md-3 col-xs-12">
-            <div class="well">
-                <h2>Projects</h2>
-                {{> addList}}
-                <ul class="unstyled">
-                    {{#if Template.subscriptionsReady}}
-                        {{#each list}}
-                            <li><a href="{{pathFor route='listPage'}}">{{name}}</a> [<a href="#" class="delete-list">Delete</a>]</li>
-                        {{/each}}
-                    {{else}}
-                        <li>Loading...</li>
-                    {{/if}}
-                </ul>
-            </div>
-        </div>
-    </div>
-</template>
-
-<template name="listPage">
-    <h2>Tasks: {{name}}</h2>
-    {{> todos}}
-</template>
-
 
 <template name="loading">
     <p>Loading...</p>
