@@ -9,10 +9,10 @@
             <div class="well">
                 <h2>Projects</h2>
                 {{> addList}}
-                <ul class="unstyled">
+                <ul class="list-group">
                     {{#if Template.subscriptionsReady}}
                         {{#each list}}
-                            <li><a href="{{pathFor route='projectPage'}}">{{name}}</a> [<a href="#" class="delete-list">Delete</a>]</li>
+                            <li class="list-group-item"><a href="{{pathFor route='projectPage'}}">{{name}}</a> [<a href="#" class="delete-list">Delete</a>]</li>
                         {{/each}}
                     {{else}}
                         <li>Loading...</li>
