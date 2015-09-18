@@ -14,7 +14,15 @@ Meteor.publish("rooms", function () {
 });
 
 Meteor.publish("messages", function () {
-    return Messages.find({}, {sort: {ts: -1}});
+    return Messages.find({}, {sort: {ts: 1}});
+});
+
+Meteor.publish("users", function () {
+    return Meteor.users.find({_id: {$ne: this.userId}}, {
+        fields: {
+            profile: 1
+        }
+    });
 });
 
 
@@ -129,23 +137,19 @@ Meteor.methods({
         }
         return Todos.remove(data);
     },
-    insertMessage: function(userId, doc) {
+    insertMessage: function(message, room) {
         var currentUser = Meteor.userId();
         var data = {
-            user: todoName,
-            msg: false,
+            user: Meteor.user().profile.name,
+            msg: message,
             ts: new Date(),
-            createdBy: currentUser,
-            listId: currentList
-        }
+            room: room,
+            createdBy: currentUser
+        };
         if(!currentUser){
             throw new Meteor.Error("not-logged-in", "You're not logged-in.");
         }
-        var currentList = Lists.findOne(currentList);
-        if(currentList.createdBy != currentUser){
-            throw new Meteor.Error("invalid-user", "You don't own that list.");
-        }
-        return Todos.insert(data);
+        return Messages.insert(data);
     }
 });
 

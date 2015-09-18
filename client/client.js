@@ -165,13 +165,17 @@ Template.register.events({
 });
 
 Template.register.onRendered(function(){
-    $('.register').validate({
+    var validator = $('.register').validate({
         submitHandler: function(event){
             var email = $('[name=email]').val();
+            var username = $('[name=username]').val();
             var password = $('[name=password]').val();
+            var name = $('#fullName').val();
             Accounts.createUser({
+                username: username,
                 email: email,
-                password: password
+                password: password,
+                profile: {name: name}
             }, function(error){
                 if(error){
                     if(error.reason == "Email already exists."){
@@ -216,7 +220,7 @@ Template.login.events({
 });
 
 Template.login.onRendered(function(){
-    $('.login').validate({
+    var validator = $('.login').validate({
         submitHandler: function(event){
             var email = $('[name=email]').val();
             var password = $('[name=password]').val();
@@ -245,10 +249,11 @@ Template.login.onRendered(function(){
 
 
 //Chat Application
-
-Meteor.subscribe("rooms");
-Meteor.subscribe("messages");
-Session.setDefault("roomname", "Meteor");
+Template.chat.onCreated(function () {
+    this.subscribe("lists");
+    this.subscribe("messages");
+    this.subscribe("users")
+});
 
 Template.input.events({
     'click .sendMsg': function(e) {
@@ -263,13 +268,19 @@ Template.input.events({
 
 _sendMessage = function() {
     var el = document.getElementById("msg");
-    Messages.insert({user: Meteor.user().username, msg: el.value, ts: new Date(), room: Session.get("roomname")});
-    el.value = "";
-    el.focus();
+    Meteor.call('insertMessage', el.value, Session.get("roomname"), function(error, results){
+        if(error){
+            console.log(error.reason);
+        } else {
+            el.value = "";
+            el.focus();
+        }
+    });
 };
 
 Template.messages.helpers({
     messages: function() {
+        console.log("Its not working", Session.get("roomname"));
         return Messages.find({room: Session.get("roomname")}, {sort: {ts: -1}});
     },
     roomname: function() {
@@ -284,25 +295,37 @@ Template.message.helpers({
 });
 
 Template.rooms.events({
-    'click li': function(e) {
-        Session.set("roomname", e.target.innerText);
+    'click li a': function(e) {
+        Session.set("roomname", e.target.textContent);
     }
 });
 
 Template.rooms.helpers({
     rooms: function() {
-        return Rooms.find();
+        return Lists.find();
     }
 });
-
 Template.room.helpers({
     roomstyle: function() {
-        return Session.equals("roomname", this.roomname) ? "font-weight: bold" : "";
+        return Session.equals("roomname", this.name) ? "font-weight: bold" : "";
     }
 });
 
-Template.chat.helpers({
-    release: function() {
-        return Meteor.release;
+
+Template.persons.helpers({
+    persons: function() {
+        return Meteor.users.find();
+    }
+});
+
+Template.person.helpers({
+    personstyle: function() {
+        return Session.equals("roomname", this.profile.name) ? "font-weight: bold" : "";
+    }
+});
+
+Template.persons.events({
+    'click li a': function(e) {
+        Session.set("roomname", e.target.textContent);
     }
 });
