@@ -252,7 +252,7 @@ Template.login.onRendered(function(){
 Template.chat.onCreated(function () {
     this.subscribe("lists");
     this.subscribe("messages");
-    this.subscribe("users")
+    this.subscribe("users");
 });
 
 Template.input.events({
@@ -268,7 +268,7 @@ Template.input.events({
 
 _sendMessage = function() {
     var el = document.getElementById("msg");
-    Meteor.call('insertMessage', el.value, Session.get("roomname"), function(error, results){
+    Meteor.call('insertMessage', el.value, Session.get("roomType"), Session.get('roomId'), function(error, results){
         if(error){
             console.log(error.reason);
         } else {
@@ -280,11 +280,22 @@ _sendMessage = function() {
 
 Template.messages.helpers({
     messages: function() {
-        console.log("Its not working", Session.get("roomname"));
-        return Messages.find({room: Session.get("roomname")}, {sort: {ts: -1}});
+        if (Session.get("roomType") == "Person") {
+            console.log("How many times", Session.get("roomId"));
+            var currentUser = Meteor.userId();
+            var roomId = defaultRoomId(Session.get("roomType"), Session.get("roomId"), currentUser);
+            return Messages.find({roomId: roomId}, {sort: {ts: 1}});
+        }
+        else {
+            return Messages.find({roomType: Session.get("roomType")}, {sort: {ts: 1}});
+        }
+
     },
     roomname: function() {
         return Session.get("roomname");
+    },
+    roomType: function() {
+        return Session.get("roomType");
     }
 });
 
@@ -314,7 +325,7 @@ Template.room.helpers({
 
 Template.persons.helpers({
     persons: function() {
-        return Meteor.users.find();
+        return Meteor.users.find({_id: {$ne: Meteor.userId()}});
     }
 });
 
@@ -329,3 +340,14 @@ Template.persons.events({
         Session.set("roomname", e.target.textContent);
     }
 });
+
+function defaultRoomId(roomType, roomId, currentUser) {
+    if (roomType == 'Person') {
+        var roomArray = [roomId, currentUser];
+        roomArray.sort();
+        return roomArray.join("_");
+    }
+    else {
+        return roomId;
+    }
+}

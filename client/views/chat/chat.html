@@ -24,7 +24,7 @@
 </template>
 
 <template name="messages">
-    <h4>Room: {{roomname}}</h4>
+    <h4>{{roomType}}: {{roomname}}</h4>
     <div id="messages" style="background-color: #ffffff; border: 1px solid darkgray; height: 500px; overflow: auto">
       {{#each messages}}
         {{> message}}
@@ -37,7 +37,7 @@
 </template>
 
 <template name="rooms">
-    <h4>Rooms:</h4>
+    <h4>Projects:</h4>
     <div id="rooms">
         <ul class="list-unstyled">
           {{#each rooms}}

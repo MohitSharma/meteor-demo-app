@@ -13,3 +13,5 @@ iron:router
 themeteorchef:jquery-validation
 less
 nemo64:bootstrap
+tomi:upload-server
+tomi:upload-jquery

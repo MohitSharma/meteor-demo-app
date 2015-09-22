@@ -18,7 +18,7 @@ Meteor.publish("messages", function () {
 });
 
 Meteor.publish("users", function () {
-    return Meteor.users.find({_id: {$ne: this.userId}}, {
+    return Meteor.users.find({}, {
         fields: {
             profile: 1
         }
@@ -29,13 +29,13 @@ Meteor.publish("users", function () {
 //Chat Application
 
 Meteor.startup(function () {
-    Messages.remove({});
+    //Messages.remove({});
     Rooms.remove({});
-    if (Rooms.find().count() === 0) {
-        ["Meteor", "JavaScript", "Reactive", "MongoDB"].forEach(function(r) {
-            Rooms.insert({roomname: r});
-        });
-    }
+    //if (Rooms.find().count() === 0) {
+    //    ["Meteor", "JavaScript", "Reactive", "MongoDB"].forEach(function(r) {
+    //        Rooms.insert({roomname: r});
+    //    });
+    //}
 });
 
 //Chat App Ends Here
@@ -137,19 +137,28 @@ Meteor.methods({
         }
         return Todos.remove(data);
     },
-    insertMessage: function(message, room) {
+    insertMessage: function(message, roomType, roomId) {
         var currentUser = Meteor.userId();
         var data = {
             user: Meteor.user().profile.name,
             msg: message,
             ts: new Date(),
-            room: room,
-            createdBy: currentUser
+            roomType: roomType,
+            sender: currentUser,
+            roomId: defaultRoomId(roomType, roomId, currentUser)
         };
         if(!currentUser){
             throw new Meteor.Error("not-logged-in", "You're not logged-in.");
         }
         return Messages.insert(data);
+    },
+    findPersonMessages: function(roomType, roomId) {
+        var currentUser = Meteor.userId();
+        if(!currentUser){
+            throw new Meteor.Error("not-logged-in", "You're not logged-in.");
+        }
+        ;
+        return Messages.find({roomId: defaultRoomId(roomType, roomId, currentUser)}).fetch();
     }
 });
 
@@ -161,4 +170,15 @@ function defaultName(currentUser) {
         nextName = 'List ' + nextLetter;
     }
     return nextName;
+}
+
+function defaultRoomId(roomType, roomId, currentUser) {
+    if (roomType == 'Person') {
+        var roomArray = [roomId, currentUser];
+        roomArray.sort();
+        return roomArray.join("_");
+    }
+    else {
+        return roomId;
+    }
 }

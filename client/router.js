@@ -27,9 +27,10 @@ Router.route('/messages/:_id/project', {
     name: "messagesProject",
     template: 'chat',
     data: function(){
-        Session.setDefault("roomname", "Project");
+        Session.set("roomType", "Project");
+        Session.set("roomId", this.params._id);
         var currentUser = Meteor.userId();
-        return currentUser;
+        return {user: currentUser, id: this.params._id};
     }
 });
 
@@ -37,9 +38,10 @@ Router.route('/messages/:_id/personal', {
     name: "messagesPersonal",
     template: 'chat',
     data: function(){
-        Session.setDefault("roomname", "Person");
+        Session.set("roomType", "Person");
+        Session.set("roomId", this.params._id);
         var currentUser = Meteor.userId();
-        return currentUser;
+        return {user: currentUser, id: this.params._id};
     }
 });
 
