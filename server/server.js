@@ -25,6 +25,12 @@ Meteor.publish("users", function () {
     });
 });
 
+Meteor.publish('emojis', function() {
+    // Here you can choose to publish a subset of all emojis
+    // if you'd like to.
+    return Emojis.find();
+});
+
 
 //Chat Application
 
@@ -159,6 +165,17 @@ Meteor.methods({
         }
         ;
         return Messages.find({roomId: defaultRoomId(roomType, roomId, currentUser)}).fetch();
+    },
+    removeMessage: function(documentId) {
+        var currentUser = Meteor.userId();
+        var data = {
+            _id: documentId,
+            sender: currentUser
+        }
+        if(!currentUser){
+            throw new Meteor.Error("not-logged-in", "You're not logged-in.");
+        }
+        return Messages.remove(data);
     }
 });
 

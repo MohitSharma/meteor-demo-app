@@ -12,20 +12,30 @@
                 {{> messages}}
                 {{> input}}
               </div>
+              <div class="col-xs-offset-3 col-xs-9 emotions_block">
+                  {{> emoji_menu}}
+              </div>
           </div>
       {{/if}}
     </div>
 </template>
 
 <template name="input">
-    <div class="form-group-lg">
-        <input type="text" id="msg" placeholder="Enter Your Message..." class="form-control">
+    <div class="message_form">
+        <div class="form-group">
+            <a aria-label="Emoji menu" class="emo_menu">
+                <i class="ts_icon ts_icon_circle_fill"></i>
+                <i class="ts_icon ts_icon_smile_o"></i>
+                <i class="ts_icon ts_icon_happy_smile"></i>
+            </a>
+            <textarea id="msg" placeholder="Enter Your Message..." class="form-control text_message" rows="1"></textarea>
+        </div>
     </div>
 </template>
 
 <template name="messages">
     <h4>{{roomType}}: {{roomname}}</h4>
-    <div id="messages" style="background-color: #ffffff; border: 1px solid darkgray; height: 500px; overflow: auto">
+    <div id="messages" class="messages">
       {{#each messages}}
         {{> message}}
       {{/each}}
@@ -33,7 +43,14 @@
 </template>
 
 <template name="message">
-    <p><strong>{{user}}</strong> <span style="font-size: 0.7em; color: darkgray">({{timestamp}})</span>: <i>{{msg}}</i></p>
+    <p class="message">
+          <strong>{{user}}</strong>
+          <span style="font-size: 0.7em; color: darkgray">({{timestamp}})</span>: <i>{{#emoji}}{{msg}}{{/emoji}}</i>
+          {{#if deleteAllowed }}
+            <i class="delete-message pull-right glyphicon glyphicon-trash"></i>
+            <i class="edit-message pull-right glyphicon glyphicon-edit"></i>
+          {{/if}}
+    </p>
 </template>
 
 <template name="rooms">
@@ -64,4 +81,14 @@
 
 <template name="person">
     <li style="cursor: pointer; {{personstyle}}"><a href="{{pathFor route='messagesPersonal'}}">{{profile.name}}</a></li>
+</template>
+
+<template name="emoji_menu">
+  {{#each emoji_list}}
+    {{> emoji_icon}}
+  {{/each}}
+</template>
+
+<template name="emoji_icon">
+    <a href="" class="emotion" data-id="{{alias}}"><img src="{{path}}" alt="{{alias}}"/></a>
 </template>

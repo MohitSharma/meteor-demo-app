@@ -255,6 +255,10 @@ Template.chat.onCreated(function () {
     this.subscribe("users");
 });
 
+Meteor.startup(function() {
+    Meteor.subscribe('emojis');
+});
+
 Template.input.events({
     'click .sendMsg': function(e) {
         _sendMessage();
@@ -274,6 +278,7 @@ _sendMessage = function() {
         } else {
             el.value = "";
             el.focus();
+            $('#messages').animate({scrollTop: $('#messages').prop("scrollHeight")}, 500);
         }
     });
 };
@@ -302,8 +307,24 @@ Template.messages.helpers({
 Template.message.helpers({
     timestamp: function() {
         return this.ts.toLocaleString();
+    },
+    deleteAllowed: function() {
+        var currentUser = Meteor.userId();
+        return this.sender === currentUser;
     }
 });
+
+Template.message.events({
+    'click .delete-message': function(event){
+        event.preventDefault();
+        var documentId = this._id;
+        var confirm = window.confirm("Delete this message?");
+        if(confirm) {
+            Meteor.call('removeMessage', documentId);
+        }
+    }
+});
+
 
 Template.rooms.events({
     'click li a': function(e) {
@@ -340,6 +361,24 @@ Template.persons.events({
         Session.set("roomname", e.target.textContent);
     }
 });
+
+
+Template.emoji_menu.helpers({
+    emoji_list: function() {
+        return Emojis.find();
+    }
+});
+
+Template.emoji_icon.events({
+    'click a img': function(e) {
+        var alias = e.target.alt;
+        var text = document.getElementById("msg").value;
+        text += ':'+alias+':';
+        document.getElementById("msg").value = text;
+        document.getElementById("msg").focus();
+    }
+});
+
 
 function defaultRoomId(roomType, roomId, currentUser) {
     if (roomType == 'Person') {
