@@ -267,6 +267,9 @@ Template.input.events({
         if (e.type == "keyup" && e.which == 13) {
             _sendMessage();
         }
+    },
+    'click .emotions_menu': function(e) {
+        Modal.show('emojiModal');
     }
 });
 
@@ -375,6 +378,7 @@ Template.emoji_icon.events({
         var text = document.getElementById("msg").value;
         text += ':'+alias+':';
         document.getElementById("msg").value = text;
+        Modal.hide('emojiModal');
         document.getElementById("msg").focus();
     }
 });

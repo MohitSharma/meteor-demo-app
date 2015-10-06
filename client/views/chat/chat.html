@@ -12,9 +12,6 @@
                 {{> messages}}
                 {{> input}}
               </div>
-              <div class="col-xs-offset-3 col-xs-9 emotions_block">
-                  {{> emoji_menu}}
-              </div>
           </div>
       {{/if}}
     </div>
@@ -23,10 +20,8 @@
 <template name="input">
     <div class="message_form">
         <div class="form-group">
-            <a aria-label="Emoji menu" class="emo_menu">
-                <i class="ts_icon ts_icon_circle_fill"></i>
-                <i class="ts_icon ts_icon_smile_o"></i>
-                <i class="ts_icon ts_icon_happy_smile"></i>
+            <a aria-label="Emoji menu" class="emotions_menu">
+                <i class="glyphicon glyphicon-info-sign"></i>
             </a>
             <textarea id="msg" placeholder="Enter Your Message..." class="form-control text_message" rows="1"></textarea>
         </div>
@@ -91,4 +86,23 @@
 
 <template name="emoji_icon">
     <a href="" class="emotion" data-id="{{alias}}"><img src="{{path}}" alt="{{alias}}"/></a>
+</template>
+
+
+<template name="emojiModal">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Select Emotion <a class="btn pull-right" data-dismiss="modal">X</a></h4>
+                </div>
+
+                <div class="modal-body">
+                  {{> emoji_menu}}
+                </div>
+
+            </div>
+        </div>
+    </div>
 </template>

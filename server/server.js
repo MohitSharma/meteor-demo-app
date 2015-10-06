@@ -36,7 +36,7 @@ Meteor.publish('emojis', function() {
 
 Meteor.startup(function () {
     //Messages.remove({});
-    Rooms.remove({});
+    //Rooms.remove({});
     //if (Rooms.find().count() === 0) {
     //    ["Meteor", "JavaScript", "Reactive", "MongoDB"].forEach(function(r) {
     //        Rooms.insert({roomname: r});

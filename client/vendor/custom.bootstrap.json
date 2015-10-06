@@ -35,7 +35,7 @@
     "wells"                : true,
     "close"                : true,
 
-    "modals"               : false,
+    "modals"               : true,
     "tooltip"              : false,
     "popovers"             : false,
     "carousel"             : false,
