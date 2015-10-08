@@ -1,0 +1,14 @@
+<template name="newProject">
+    <div class="col-xs-12">
+        <h4>Create Project</h4>
+        <form>
+            <div class="form-group">
+                <input type="text" placeholder="Project Name" name="projectName" class="form-control">
+            </div>
+            <div class="form-group">
+                {{> inputAutocomplete settings=settings id="lead" class="form-control" placeholder="Project Lead" name="projectLead"}}
+            </div>
+            <button type="submit" class="btn btn-success">Create Project</button>
+        </form>
+    </div>
+</template>

@@ -1,44 +1,38 @@
-<!-- Todo Templates -->
+<!-- Task Templates -->
 
-<template name="todos">
-    {{> addTodo}}
+<template name="tasks">
+    {{> addTask}}
     <ul>
-        {{#each todo}}
-            {{> todoItem}}
+        {{#each task}}
+            {{> taskItem}}
         {{/each}}
     </ul>
-    {{> todosCount}}
+    {{> tasksCount}}
 </template>
 
-<template name="addTodo">
+<template name="addTask">
     <form>
         Create a task:
-        <input type="text" placeholder="Type a task here..." name="todoName">
+        <input type="text" placeholder="Type a task here..." name="taskName">
     </form>
 </template>
 
-<template name="todoItem">
+<template name="taskItem">
     <li class="{{checked}}">
         <input type="checkbox" {{checked}}>
-        <input type="text" value="{{name}}" name="todoItem"/>
-        [<a href="#" class="delete-todo">Delete</a>]
+        <input type="text" value="{{name}}" name="taskItem"/>
+        [<a href="#" class="delete-task">Delete</a>]
     </li>
 </template>
 
-<template name="todosCount">
-    {{#if totalTodos}}
-        <p>You have completed {{completedCount}} out of {{totalTodos}} tasks</p>
+<template name="tasksCount">
+    {{#if totalTasks}}
+        <p>You have completed {{completedCount}} out of {{totalTasks}} tasks</p>
     {{/if}}
 </template>
 
 
 <!-- List Templates -->
-
-<template name="addList">
-    <form>Create a list:
-        <input type="text" placeholder="List name here..." name="listName">
-    </form>
-</template>
 
 
 <template name="loading">

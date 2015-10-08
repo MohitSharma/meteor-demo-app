@@ -16,6 +16,7 @@
             <div class="navbar-collapse collapse" id="navbar">
                 <ul class="nav navbar-nav navbar-right">
                     {{#if currentUser}}
+                        <li><a href="{{pathFor route='projects'}}">Projects</a></li>
                         <li><a href="{{pathFor route='messages'}}">Messages</a></li>
                         <li><a href="{{pathFor route='account'}}">My Account</a></li>
                         <li><a href="#" class="logout">Logout</a></li>

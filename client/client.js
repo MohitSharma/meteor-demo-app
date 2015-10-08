@@ -4,12 +4,18 @@ $.validator.setDefaults({
             required: true,
             email: true
         },
+        username: {
+            required: true
+        },
         password: {
             required: true,
             minlength: 6
         }
     },
     messages: {
+        username: {
+            required: "You must enter username."
+        },
         email: {
             required: "You must enter an email address.",
             email: "You've entered an invalid email address."
@@ -21,17 +27,17 @@ $.validator.setDefaults({
     }
 });
 
-//Handling Todos
+//Handling Tasks
 
-Template.todos.helpers({
-    'todo': function(){
-        var currentList = this._id;
+Template.tasks.helpers({
+    'task': function(){
+        var currentProject = this._id;
         var currentUser = Meteor.userId();
-        return Todos.find({listId: currentList, createdBy: currentUser}, {sort: {createdAt: -1}});
+        return Tasks.find({projectId: currentProject, createdBy: currentUser}, {sort: {createdAt: -1}});
     }
 });
 
-Template.todoItem.helpers({
+Template.taskItem.helpers({
     'checked': function(){
         var isCompleted = this.completed;
         if(isCompleted){
@@ -48,58 +54,58 @@ Template.projectLists.events({
         var documentId = this._id;
         var confirm = window.confirm("Delete this list?");
         if(confirm) {
-            Meteor.call('removeList', documentId);
+            Meteor.call('removeProject', documentId);
         }
     }
 });
 
-Template.todosCount.helpers({
+Template.tasksCount.helpers({
     completedCount: function () {
-        var currentList = this._id;
+        var currentProject = this._id;
         var currentUser = Meteor.userId();
-        return Todos.find({listId: currentList, completed: true, createdBy:currentUser}).count();
+        return Tasks.find({listId: currentProject, completed: true, createdBy:currentUser}).count();
     },
-    totalTodos: function () {
-        var currentList = this._id;
+    totalTasks: function () {
+        var currentProject = this._id;
         var currentUser = Meteor.userId();
-        return Todos.find({listId: currentList, createdBy:currentUser}).count();
+        return Tasks.find({listId: currentProject, createdBy:currentUser}).count();
     }
 });
 
-Template.addTodo.events({
+Template.addTask.events({
     'submit form': function(event){
         event.preventDefault();
-        var todoName = $('[name="todoName"]').val();
-        var currentList = this._id;
-        Meteor.call('createListItem', todoName, currentList, function(error, results){
+        var taskName = $('[name="taskName"]').val();
+        var currentProject = this._id;
+        Meteor.call('createProjectItem', taskName, currentProject, function(error, results){
             if(error){
                 console.log(error.reason);
             } else {
-                $('[name="todoName"]').val('');
+                $('[name="taskName"]').val('');
             }
         });
     }
 });
 
-Template.todoItem.events({
-    'click .delete-todo': function(event){
+Template.taskItem.events({
+    'click .delete-task': function(event){
         event.preventDefault();
         var documentId = this._id;
         var confirm = window.confirm("Delete this task?");
         if(confirm) {
-            Meteor.call('removeListItem', documentId);
+            Meteor.call('removeProjectItem', documentId);
         }
     },
-    'keyup [name=todoItem]': function(event) {
+    'keyup [name=taskItem]': function(event) {
         if (event.which==13 || event.which == 27) {
             $(event.target).blur();
             console.log("Saved");
         }
         else {
             var documentId = this._id;
-            var todoItem = $(event.target).val();
-            Meteor.call('updateListItem', documentId, todoItem);
-            console.log("Task changed to: " + todoItem);
+            var taskItem = $(event.target).val();
+            Meteor.call('updateProjectItem', documentId, taskItem);
+            console.log("Task changed to: " + taskItem);
         }
     },
     'change [type=checkbox]': function(){
@@ -114,34 +120,53 @@ Template.todoItem.events({
 });
 
 
-//Handling Lists
+//Handling Projects
 
 Template.projectLists.helpers({
-    'list': function(){
+    'projects': function(){
         var currentUser = Meteor.userId();
-        return Lists.find({createdBy: currentUser}, {sort: {name: 1}});
+        return Projects.find({createdBy: currentUser}, {sort: {name: 1}});
     }
 });
 
 //Template Level Subscriptions
 
 Template.projectLists.onCreated(function () {
-    this.subscribe('lists');
+    this.subscribe('projects');
 });
 
 
-Template.addList.events({
+Template.newProject.events({
     'submit form': function(event){
         event.preventDefault();
-        var listName = $('[name=listName]').val();
-        Meteor.call('createNewList', listName, function(error, results){
+        var projectName = $('[name=projectName]').val();
+        var projectLead = $('[name=projectLead]').val();
+        Meteor.call('createNewProject', projectName, projectLead, function(error, results){
             if(error){
                 console.log(error.reason);
             } else {
-                Router.go('listPage', { _id: results });
-                $('[name=listName]').val('');
+                Router.go('projectPage', { _id: results });
+                $('[name=projectName]').val('');
             }
         });
+    }
+});
+
+
+Template.newProject.helpers({
+    settings: function() {
+        return {
+            position: "top",
+            limit: 5,
+            rules: [
+                {
+                    token: '',
+                    collection: Meteor.users,
+                    field: "username",
+                    template: Template.userPill
+                }
+            ]
+        };
     }
 });
 
@@ -250,13 +275,13 @@ Template.login.onRendered(function(){
 
 //Chat Application
 Template.chat.onCreated(function () {
-    this.subscribe("lists");
+    this.subscribe("projects");
     this.subscribe("messages");
-    this.subscribe("users");
 });
 
 Meteor.startup(function() {
     Meteor.subscribe('emojis');
+    Meteor.subscribe("users");
 });
 
 Template.input.events({
@@ -337,7 +362,7 @@ Template.rooms.events({
 
 Template.rooms.helpers({
     rooms: function() {
-        return Lists.find();
+        return Projects.find();
     }
 });
 Template.room.helpers({

@@ -1,6 +1,6 @@
-Todos = new Meteor.Collection('todos');
+Tasks = new Meteor.Collection('tasks');
 
-Lists = new Meteor.Collection('lists');
+Projects = new Meteor.Collection('projects');
 
 Messages = new Meteor.Collection("messages");
 

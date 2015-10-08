@@ -23,6 +23,24 @@ Router.route('/messages', {
     }
 });
 
+Router.route('/projects', {
+    name: "projects",
+    template: 'projectLists',
+    data: function(){
+        var currentUser = Meteor.userId();
+        return currentUser;
+    }
+});
+
+Router.route('/projects/new', {
+    name: "newProject",
+    template: 'newProject',
+    data: function(){
+        var currentUser = Meteor.userId();
+        return currentUser;
+    }
+});
+
 Router.route('/messages/:_id/project', {
     name: "messagesProject",
     template: 'chat',
@@ -45,16 +63,16 @@ Router.route('/messages/:_id/personal', {
     }
 });
 
-Router.route('/list/:_id', {
+Router.route('/projects/:_id', {
     name: 'projectPage',
     template: 'projectPage',
     data: function(){
-        var currentList = this.params._id;
-        return Lists.findOne({_id: currentList});
+        var currentProject = this.params._id;
+        return Projects.findOne({_id: currentProject});
     },
     waitOn: function(){
-        var currentList = this.params._id;
-        return [Meteor.subscribe('lists', currentList), Meteor.subscribe('todos', currentList)];
+        var currentProject = this.params._id;
+        return [Meteor.subscribe('projects', currentProject), Meteor.subscribe('tasks', currentProject)];
     },
     onBeforeAction: function(){
         var currentUser = Meteor.userId();
