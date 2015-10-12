@@ -12,20 +12,37 @@
                 <a href="/" class="navbar-brand">Tasks</a>
             </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="navbar-collapse collapse" id="navbar">
+
+            <div class="navbar-collapse collapse">
+
                 <ul class="nav navbar-nav navbar-right">
                     {{#if currentUser}}
+                        <li><a href="{{pathFor route=''}}">Add Task</a></li>
                         <li><a href="{{pathFor route='projects'}}">Projects</a></li>
                         <li><a href="{{pathFor route='messages'}}">Messages</a></li>
-                        <li><a href="{{pathFor route='account'}}">My Account</a></li>
-                        <li><a href="#" class="logout">Logout</a></li>
+                        <li class="dropdown hidden-xs">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{currentUser.username}} <i class="glyphicon glyphicon-chevron-down i-xs"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/profile">Profile</a></li>
+                                <li><a href="{{pathFor route='account'}}">My Account</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#" class="logout">Logout</a></li>
+                            </ul>
+                        </li>
+                        <li class="visible-xs">
+                            <a href="/profile" class="close-navbar">Edit profile</a>
+                        </li>
+                        <li class="visible-xs">
+                            <a class="close-navbar" href="/sign-out">Sign out</a>
+                        </li>
                     {{else}}
                         <li><a href="{{pathFor route='register'}}">Register</a></li>
                         <li><a href="{{pathFor route='login'}}">Login</a></li>
                     {{/if}}
+
                 </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
+
+            </div>
+        </div>
     </nav>
 </template>

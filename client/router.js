@@ -1,5 +1,12 @@
+Router.configure({
+    layoutTemplate: 'main',
+    loadingTemplate: 'loading'
+});
+
 Router.route('/register');
+
 Router.route('/login');
+
 Router.route('/', {
     name: "home",
     template: 'home'
@@ -8,6 +15,15 @@ Router.route('/', {
 Router.route('/account', {
     name: "account",
     template: 'account',
+    data: function(){
+        var currentUser = Meteor.userId();
+        return currentUser;
+    }
+});
+
+Router.route('/profile', {
+    name: "profile",
+    template: 'profile',
     data: function(){
         var currentUser = Meteor.userId();
         return currentUser;
@@ -82,9 +98,4 @@ Router.route('/projects/:_id', {
             this.render("login");
         }
     }
-});
-
-Router.configure({
-    layoutTemplate: 'main',
-    loadingTemplate: 'loading'
 });

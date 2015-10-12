@@ -6,7 +6,7 @@
             <ul class="list-group">
                 {{#if Template.subscriptionsReady}}
                     {{#each projects}}
-                        <li class="list-group-item"><a href="{{pathFor route='projectPage'}}">{{name}}</a> [<a href="#" class="delete-list">Delete</a>]</li>
+                        <li class="list-group-item"><a href="{{pathFor route='projectPage'}}">{{name}}</a> <a href="#" class="pull-right glyphicon glyphicon-trash delete-list"></a></li>
                     {{/each}}
                 {{else}}
                     <li>Loading...</li>

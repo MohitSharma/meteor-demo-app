@@ -1,0 +1,23 @@
+<template name="tasks">
+  {{> addTask}}
+    <ul>
+      {{#each task}}
+        {{> taskItem}}
+      {{/each}}
+    </ul>
+  {{> tasksCount}}
+</template>
+
+<template name="taskItem">
+    <li class="{{checked}}">
+        <input type="checkbox" {{checked}}>
+        <input type="text" value="{{name}}" name="taskItem"/>
+        [<a href="#" class="delete-task">Delete</a>]
+    </li>
+</template>
+
+<template name="tasksCount">
+  {{#if totalTasks}}
+      <p>You have completed {{completedCount}} out of {{totalTasks}} tasks</p>
+  {{/if}}
+</template>

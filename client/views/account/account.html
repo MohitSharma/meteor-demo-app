@@ -1,14 +1,88 @@
-<!-- Account -->
+
 <template name="account">
-    <h2>Welcome {{currentUser.profile.name}}</h2>
-    <form>
-        <div class="form-group">
-            <label for="fullname">Full Name</label>
-            <input type="text" class="form-control" name="fullName" value="{{currentUser.profile.name}}"/>
+    <div class="container">
+        <div class="row" id="champion-messages">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Account Details</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{> updatePassword}}
+                    </div>
+                </div>
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Delete Account</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>There's no coming back from this one</p>
+                        <p>
+                            <a class="btn btn-danger" data-toggle="modal" href='#delete-account'>Delete Account</a>
+                        <div class="modal fade" id="delete-account">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Delete account</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete your account?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-danger js-delete-account">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" name="email" value="{{currentUser.email}}"/>
-        </div>
+    </div>
+</template>
+
+<template name="updatePassword">
+    <form id="updatePassword">
+        <fieldset>
+            <legend>Change Password</legend>
+            <div class="form-group">
+                <input name="old" type="password"  class="form-control"/>
+            </div>
+            <div class="form-group">
+                <input name="new" type="password" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input name="confirm" type="password" class="form-control" />
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Change Password</button>
+            </div>
+        </fieldset>
     </form>
+</template>
+
+<template name="setUserName">
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Account Details</h3>
+                </div>
+                <div class="panel-body">
+                    <form id="setUserName">
+                        <fieldset>
+                            <legend>Choose your name</legend>
+                            <input type="text" name="username" />
+                            <div>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </fieldset>
+                    </form>}
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
